@@ -1,0 +1,48 @@
+*{
+    box-sizing: border-box;
+}
+
+:root {
+    --hue: 100;
+    --saturation: 50%;
+    --lighter-color: hsl(var(--hue), var(--saturation), 75%);
+    --darker-color: hsl(var(--hue), var(--saturation), 20%);
+}
+
+body {
+    margin: 0;
+    overflow: hidden;
+    background-color: var(--darker-color);
+}
+
+
+#shooter{
+    --x: 50;
+    --y: 95;
+
+    position: absolute;
+    top: calc(var(--y) * 1vh);
+    left: calc(var(--x) * 1vw);
+    transform: translate(-50%, -50%);
+    
+    width: 1vh;
+    height: 1vh;
+
+    background-color: var(--lighter-color);
+}
+
+.ball {
+    --x: 50;
+    --y: 50;
+  
+    position: absolute;
+    top: calc(var(--y) * 1vh);
+    left: calc(var(--x) * 1vw);
+    transform: translate(-50%, -50%);
+
+    border-radius: 50%;
+    width: 3.5vh;
+    height: 3.5vh;
+
+    background-color: var(--lighter-color);
+}
