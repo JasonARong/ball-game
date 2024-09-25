@@ -1,6 +1,14 @@
+/**
+ * Ball Game Object Class
+ *
+ * @summary Ball Game Object
+ * @author Jason Chen
+ *
+ * Reference: https://github.com/WebDevSimplified/js-pong
+ */
 const INITIAL_VELOCITY = 0.025;
 const SHOOT_VELOCITY = 0.06;
-const VELOCITY_INCREASE = -0.000003;
+const VELOCITY_INCREASE = -0.000002;
 
 const shooter = document.getElementById('shooter');
 
@@ -55,9 +63,9 @@ export default class Ball {
 
     shoot(direction){
         this.x = parseFloat(getComputedStyle(shooter).getPropertyValue('--x'));
-        this.y = parseFloat(getComputedStyle(shooter).getPropertyValue('--y'));;
-        console.log('this.x', this.x);
-        console.log('this.y', this.y);
+        this.y = parseFloat(getComputedStyle(shooter).getPropertyValue('--y'));
+        // console.log('this.x', this.x);
+        // console.log('this.y', this.y);
         this.direction = direction;
         this.velocity = SHOOT_VELOCITY;
     }

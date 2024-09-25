@@ -1,5 +1,4 @@
 /**
- *
  * Main logic for the Ball Game
  *
  * @summary Ball Game Main Logic
@@ -9,18 +8,20 @@
  */
 
 import Ball from "./Ball.js"
-import Paddle from "./Paddle.js";
-
 
 const shooter = document.getElementById('shooter');
 const shooterRect = shooter.getBoundingClientRect();
 
 const balls = [];
-let numberOfBalls = 3;
+let numberOfBalls = 1;
 const maxNumberOfBalls = 20;
 
 let pause = false;
 let lastTime;
+const maxAngle = 160;
+const minAngle = 20;
+let angle = 20;
+let rightToLeft = true;
 
 // Loop to create and append elements
 for (let i = 0; i < numberOfBalls; i++) {
@@ -32,12 +33,27 @@ function update(time){
     //update loop
     if (lastTime !=  null){
         const delta = time - lastTime;   
-
         if (!pause){
             for (let i = 0; i < numberOfBalls; i++){
                 const otherBalls = balls.slice(0, i).concat(balls.slice(i + 1));
                 balls[i].update(delta, otherBalls);
             }
+
+            if(angle < maxAngle && rightToLeft){
+                angle += 0.5;
+            }
+            else if(angle >= maxAngle && rightToLeft){
+                rightToLeft = false;
+            }
+
+            if(angle > minAngle && !rightToLeft){
+                angle -= 0.5;
+            }
+            else if(angle <= minAngle && !rightToLeft){
+                rightToLeft = true;
+            }
+            //console.log(angle);
+            shooter.style.setProperty('--r', `-${angle}deg`);
         }
     }
      
@@ -71,11 +87,7 @@ document.addEventListener('click', (event)=>{
     if(numberOfBalls >= maxNumberOfBalls){
         return;
     }
-
-    console.log(event.x);
-    console.log(event.y);
-    
-    const direction = calculateUnitVector(getShooterX(), getShooterY(), event.clientX, event.clientY);
+    const direction = unitVectorFromDegree(angle);
 
     const newBallObj = createBall(direction);
     balls.push(newBallObj);
@@ -93,28 +105,12 @@ function createBall(direction){
     return new Ball(newBall, direction);
 }
 
-// Calculate the unit vector from 2 sets of xy values
-function calculateUnitVector(x1, y1, x2, y2) {
-    // Calculate the difference in x and y coordinates
-    const dx = x2 - x1;
-    const dy = y2 - y1;
-    
-    // Calculate the magnitude (length) of the vector
-    const magnitude = Math.sqrt(dx * dx + dy * dy);
-    //let magnitude = 500;
-    
-    // Normalize the vector to get the unit vector
-    const unitX = dx / magnitude;
-    const unitY = dy / magnitude;
-    
-    return { x: unitX, y: unitY };
-  }
 
-function getShooterX(){
-    return shooterRect.left + (shooterRect.width / 2);
-}
-function getShooterY(){
-    return shooterRect.top + (shooterRect.height / 2);
+function unitVectorFromDegree(degrees){
+    const currRadians = -degrees * (Math.PI / 180);
+    console.log('degrees',degrees);
+    console.log({x:Math.cos(currRadians), y:Math.sin(currRadians)});
+    return {x:Math.cos(currRadians), y:Math.sin(currRadians)};
 }
 
 window.requestAnimationFrame(update);
